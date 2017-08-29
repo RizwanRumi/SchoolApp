@@ -17,5 +17,6 @@ namespace AciLabTestApp.IBLL
         IList<CourseViewModel> GetRemainCourseList(int stdId);
         bool AddCompleteCourseViewModel(CompleteCourseViewModel cmpModel);
         List<ResultViewModel> GetAllResult(int stdId);
+        bool AddResult(ResultViewModel model);
     }
 }

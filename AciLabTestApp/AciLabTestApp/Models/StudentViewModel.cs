@@ -17,7 +17,7 @@ namespace AciLabTestApp.Models
 
         [DisplayName("Student Email")]
         [Required(ErrorMessage = "{0} is required.")]
-        [DataType(DataType.EmailAddress)]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
         [DisplayName("Address")]

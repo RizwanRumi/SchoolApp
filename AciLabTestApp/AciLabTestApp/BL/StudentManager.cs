@@ -66,7 +66,6 @@ namespace AciLabTestApp.BL
             return tutorials;
         }
 
-
         public bool AddTutotrial(TutorialViewModel tmodel)
         {
             var aTutorial = new tblTutorial
@@ -160,9 +159,24 @@ namespace AciLabTestApp.BL
                     StudentId = s.StudentId,
                     SemesterName = s.SemesterName,
                     Grade = s.Grade
-                }).ToList();
+                }).Where(s=>s.StudentId == stdId).ToList();
 
             return students;
-        } 
+        }
+
+        public bool AddResult(ResultViewModel resModel)
+        {
+            var result = new tblResult
+            {
+                StudentId = resModel.StudentId,
+                SemesterName = resModel.SemesterName,
+                Grade = resModel.Grade
+            };
+
+            dbContext.tblResults.Add(result);
+            dbContext.SaveChanges();
+
+            return true;
+        }
     }
 }

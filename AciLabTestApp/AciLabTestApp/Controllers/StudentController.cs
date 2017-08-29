@@ -336,11 +336,39 @@ namespace AciLabTestApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateResult([Bind(Include = "ResultId,StudentId,SemesterName,Grade")] ResultViewModel model)
         {
-            if (ModelState.IsValid)
+            var userLogin = (LoginViewModel)Session["login"];
+
+            if (userLogin != null && model.StudentId != 0)
             {
+                if (ModelState.IsValid)
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("http://localhost:1582/api/");
+
+                        var responseTask = client.PostAsJsonAsync("Student/savedResult", model);
+                        responseTask.Wait();
+
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            ViewBag.Message = "Add Result Successfully";
+                            ViewBag.Error = false;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                        }
+                    }
+                }
                 return View(model);
             }
-            return View(model);
+            return RedirectToAction("Login", "Login");
+        }
+
+        public ActionResult EditResult(int? id)
+        {
+            return View();
         }
 
 	}

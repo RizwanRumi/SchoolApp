@@ -140,5 +140,14 @@ namespace AciLabTestApp.Controllers
             return Json(resList);
         }
 
+        [Route("savedResult")]
+        [HttpPost]
+        public IHttpActionResult PostResult(ResultViewModel resModel)
+        {
+            bool res = istudentDetails.AddResult(resModel);
+
+            return Json(res);
+        }
+
     }
 }

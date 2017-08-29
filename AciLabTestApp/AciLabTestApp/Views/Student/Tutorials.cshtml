@@ -12,7 +12,7 @@
     @Html.ActionLink("Create New", "CreateTutorial", new { id = ViewBag.Id})
 </p>
 
-<table class="table">
+<table class="table table-bordered table-responsive">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.TutorialId)
@@ -29,51 +29,52 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TutorialId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StudentId)
-        </td>
-        <td>
-            @*if you want to run file*@
-            
-            @*@{
-                var fName = item.FileName;
-                string[] fileName = fName.Split('.');
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TutorialId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentId)
+            </td>
+            <td>
+                @*if you want to run file in html view*@
 
-                if (fileName[1] == "mp3" || fileName[1] == "mp4")
-                {
-                    <video width="200" height="100" controls>
-                        <source src="/UploadFiles/@fName" type="video/mp4">
-                    </video>
-                }
-                if (fileName[1] == "3gp")
-                {
-                    <source src="/UploadFiles/@fName" type='video/3gpp; codecs="mp4v.20.8, samr"'>
-                    </source>
-                }
-                else
-                {
-                    @Html.DisplayFor(modelItem => item.FileName)
-                }
-            }*@
-            
-            @Html.DisplayFor(modelItem => item.FileName)
-           
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Complete)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditTutorial", new {id = item.TutorialId}) 
-           
-        </td>
-    </tr>
-}
-    
+                @*@{
+                        var fName = item.FileName;
+                        string[] fileName = fName.Split('.');
+
+                        if (fileName[1] == "mp3" || fileName[1] == "mp4")
+                        {
+                            <video width="200" height="100" controls>
+                                <source src="/UploadFiles/@fName" type="video/mp4">
+                            </video>
+                        }
+                        if (fileName[1] == "3gp")
+                        {
+                            <source src="/UploadFiles/@fName" type='video/3gpp; codecs="mp4v.20.8, samr"'>
+                            </source>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.FileName)
+                        }
+                    }*@
+
+                @Html.DisplayFor(modelItem => item.FileName)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Complete)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditTutorial", new { id = item.TutorialId })
+
+            </td>
+        </tr>
+    }
+
     <tr>
         <td>
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
