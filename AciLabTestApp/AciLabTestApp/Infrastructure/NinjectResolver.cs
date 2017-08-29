@@ -57,7 +57,7 @@ namespace AciLabTestApp.Infrastructure
         private IKernel AddRequestBindings(IKernel kernel)
         {
             kernel.Bind<ICourse>().To<CourseManager>().InSingletonScope();
-
+            kernel.Bind<IStudent>().To<StudentManager>().InSingletonScope();
 
             return kernel;
         }

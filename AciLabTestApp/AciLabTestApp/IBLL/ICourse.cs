@@ -10,5 +10,10 @@ namespace AciLabTestApp.IBLL
     public interface ICourse
     {
         IList<CourseViewModel> GetAllCourses();
+
+        bool AddCourse(CourseViewModel aCourse);
+
+        CourseViewModel GetCourse(int id);
+        bool EditCourse(CourseViewModel editcourse);
     }
 }

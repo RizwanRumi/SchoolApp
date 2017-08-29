@@ -15,7 +15,7 @@ namespace AciLabTestApp
     public partial class tblLogin
     {
         public int loginId { get; set; }
-        public string StudentName { get; set; }
+        public string StudentId { get; set; }
         public string StudentEmail { get; set; }
         public string Password { get; set; }
     }

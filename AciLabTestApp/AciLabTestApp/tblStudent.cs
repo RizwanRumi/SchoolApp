@@ -21,5 +21,6 @@ namespace AciLabTestApp
         public string Department { get; set; }
         public int Batch { get; set; }
         public System.DateTime Enrolled { get; set; }
+        public string Password { get; set; }
     }
 }

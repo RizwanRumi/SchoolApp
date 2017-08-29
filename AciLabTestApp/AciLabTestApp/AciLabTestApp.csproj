@@ -163,60 +163,70 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="BL\CourseManager.cs" />
+    <Compile Include="BL\StudentManager.cs" />
     <Compile Include="Controllers\CourseApiController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\StudentApiController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\Test2Controller.cs" />
+    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="IBLL\ICourse.cs" />
+    <Compile Include="IBLL\IStudent.cs" />
     <Compile Include="Infrastructure\NinjectResolver.cs" />
     <Compile Include="Models\CourseViewModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\StudentViewModel.cs" />
+    <Compile Include="Models\TutorialViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SchoolDb.Context.cs">
+    <Compile Include="StudentDb.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SchoolDb.Context.tt</DependentUpon>
+      <DependentUpon>StudentDb.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="SchoolDb.cs">
+    <Compile Include="StudentDb.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="SchoolDb.Designer.cs">
+    <Compile Include="StudentDb.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SchoolDb.edmx</DependentUpon>
+      <DependentUpon>StudentDb.edmx</DependentUpon>
     </Compile>
     <Compile Include="tblCourse.cs">
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
     <Compile Include="tblCourseComplete.cs">
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
     <Compile Include="tblLogin.cs">
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
     <Compile Include="tblResult.cs">
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
     <Compile Include="tblStudent.cs">
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
     <Compile Include="tblTutorial.cs">
-      <DependentUpon>SchoolDb.tt</DependentUpon>
+      <DependentUpon>StudentDb.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
     <Content Include="Areas\HelpPage\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Index.cshtml" />
@@ -228,26 +238,23 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\HelpPageApiModel.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <EntityDeploy Include="SchoolDb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>SchoolDb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="SchoolDb.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SchoolDb.edmx</DependentUpon>
-      <LastGenOutput>SchoolDb.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="SchoolDb.edmx.diagram">
-      <DependentUpon>SchoolDb.edmx</DependentUpon>
-    </Content>
-    <Content Include="SchoolDb.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>SchoolDb.edmx</DependentUpon>
-      <LastGenOutput>SchoolDb.cs</LastGenOutput>
-    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -268,14 +275,40 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Course\Index.cshtml" />
+    <Content Include="Views\Test2\Create.cshtml" />
+    <Content Include="Views\Test2\Delete.cshtml" />
+    <Content Include="Views\Test2\Details.cshtml" />
+    <Content Include="Views\Test2\Edit.cshtml" />
+    <Content Include="Views\Test2\Index.cshtml" />
+    <Content Include="Views\Course\Create.cshtml" />
+    <Content Include="Views\Course\Edit.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Login\Home.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
+    <EntityDeploy Include="StudentDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>StudentDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="StudentDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>StudentDb.edmx</DependentUpon>
+      <LastGenOutput>StudentDb.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="StudentDb.edmx.diagram">
+      <DependentUpon>StudentDb.edmx</DependentUpon>
+    </Content>
+    <Content Include="StudentDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>StudentDb.edmx</DependentUpon>
+      <LastGenOutput>StudentDb.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Login\Login.cshtml" />
+    <Content Include="Views\Student\Tutorials.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>

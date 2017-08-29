@@ -1,4 +1,5 @@
-﻿using AciLabTestApp.IBLL;
+﻿using System.Data.Entity.Infrastructure;
+using AciLabTestApp.IBLL;
 using AciLabTestApp.Models;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,48 @@ namespace AciLabTestApp.Controllers
 
             return Json(courseList);
         }
+        
+        [Route("saveCourse")]
+        [HttpPost]
+        public IHttpActionResult PostCourse(CourseViewModel course)
+        {
+            string msg = "";
+          
+            bool res = icourseDetails.AddCourse(course);
+
+            msg = res ? "Add Successfully" : "Error";
+
+            return Json(msg);
+        }
+        
+        [Route("getCourse")]
+        [HttpGet]
+        public IHttpActionResult GetCourse(int id)
+        {
+            CourseViewModel course = null;
+            course = icourseDetails.GetCourse(id);
+            
+            return Json(course);
+        }
+
+        [Route("updateCourse")]
+        [HttpPost]
+        public IHttpActionResult PutCourse(CourseViewModel editCourse)
+        {
+            string msg = "";
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            bool res = icourseDetails.EditCourse(editCourse);
+
+            msg = res ? "Add Successfully" : "Error";
+            return Json(msg);
+            
+        }
+
         
     }
 }

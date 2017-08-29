@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using AciLabTestApp.Models
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,12 +17,22 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", null, new { @class = "navbar-brand" })
+                @Html.ActionLink("Student CRUD", "Index", "Home", null, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, null)</li>
-                    <li>@Html.ActionLink("API", "Index", "Help", new { area = "" }, null)</li>
+                    @{
+                        var userLogin = (LoginViewModel) Session["login"];
+                        if (userLogin != null)
+                        {
+                            <li>@Html.ActionLink("Student Tutorials", "Tutorials", "Student", new {id = userLogin.StudentId, area = ""}, null)</li>
+                            <li>@Html.ActionLink("Student CourseList", "CourseList", "Student", new {id = userLogin.StudentId, area = ""}, null)</li>
+                            <li>@Html.ActionLink("Student Result", "Result", "Student", new {id = userLogin.StudentId, area = ""}, null)</li>
+                            <li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>
+                            <li>@Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "glyphicon-log-out" })</li>
+                        }
+                    }
+                    
                 </ul>
             </div>
         </div>
