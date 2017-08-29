@@ -142,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="UploadFiles\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -304,6 +305,7 @@
     </Content>
     <Content Include="Views\Login\Login.cshtml" />
     <Content Include="Views\Student\Tutorials.cshtml" />
+    <Content Include="Views\Student\CreateTutorial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

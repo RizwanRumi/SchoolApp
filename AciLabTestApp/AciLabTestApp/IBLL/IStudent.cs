@@ -13,5 +13,7 @@ namespace AciLabTestApp.IBLL
         StudentViewModel AddNewStudent(StudentViewModel model);
 
         IList<TutorialViewModel> GetAllTutorial(int id);
+
+        bool AddTutotrial(TutorialViewModel tmodel);
     }
 }

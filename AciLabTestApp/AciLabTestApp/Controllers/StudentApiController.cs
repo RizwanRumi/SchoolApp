@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using AciLabTestApp.IBLL;
 using AciLabTestApp.Models;
@@ -49,6 +51,60 @@ namespace AciLabTestApp.Controllers
             tutorials = istudentDetails.GetAllTutorial(id);
 
             return Json(tutorials);
+        }
+
+
+        [Route("FileUpload")]
+        [HttpPost]
+        public IHttpActionResult PostFileUpload()
+        {
+
+            HttpResponseMessage result = null;
+            string getFileName = "";
+
+            var httpRequest = HttpContext.Current.Request;
+
+            if (httpRequest.Files.Count > 0)
+            {
+
+                foreach (string file in httpRequest.Files)
+                {
+
+                    var postedFile = httpRequest.Files[file];
+
+                    if (postedFile != null)
+                    {
+                        var imgname = Path.GetFileName(postedFile.FileName);
+                        var extension = Path.GetExtension(imgname);
+
+                        Random _r = new Random();
+                        var randomId = _r.Next();
+
+                        string[] fileName = imgname.Split('.');
+
+                        getFileName = fileName[0] + "_" + randomId + extension;
+
+
+                        var filePath = HttpContext.Current.Server.MapPath("~/UploadFiles/" + getFileName);
+                        postedFile.SaveAs(filePath);
+                    }
+                }
+
+                return Json(getFileName);
+
+            }
+
+            return Json(HttpStatusCode.BadRequest);
+        }
+
+
+        [Route("AddTutorial")]
+        [HttpPost]
+        public IHttpActionResult PostTutorial(TutorialViewModel tmodel)
+        {
+           bool res = istudentDetails.AddTutotrial(tmodel);
+            
+           return Json(res);
         }
         
     }

@@ -69,5 +69,21 @@ namespace AciLabTestApp.BL
 
             return tutorials;
         }
+
+
+        public bool AddTutotrial(TutorialViewModel tmodel)
+        {
+            tblTutorial aTutorial = new tblTutorial();
+            aTutorial.StudentId = tmodel.StudentId;
+            aTutorial.TutorialId = tmodel.TutorialId;
+            aTutorial.FileName = tmodel.FileName;
+            aTutorial.Complete = tmodel.Complete;
+          
+
+            dbContext.tblTutorials.Add(aTutorial);
+            dbContext.SaveChanges();
+            
+            return true;
+        }
     }
 }
