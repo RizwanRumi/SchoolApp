@@ -143,5 +143,10 @@ namespace AciLabTestApp.Controllers
             return RedirectToAction("Login", "Login");
         }
 
+
+        public ActionResult EditTutorial(int id)
+        {
+            return View();
+        }
 	}
 }
