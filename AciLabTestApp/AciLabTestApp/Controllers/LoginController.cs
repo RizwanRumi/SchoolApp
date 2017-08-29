@@ -47,7 +47,7 @@ namespace AciLabTestApp.Controllers
                         var result = responseTask.Result;
                         if (result.IsSuccessStatusCode)
                         {
-                            var readTask = result.Content.ReadAsAsync<IList<StudentViewModel>>();
+                            var readTask = result.Content.ReadAsAsync<List<StudentViewModel>>();
                             readTask.Wait();
 
                             var getStudentList = readTask.Result;
@@ -58,6 +58,8 @@ namespace AciLabTestApp.Controllers
                                 {
                                     model.StudentId = stVm.StudentId;
 
+                                    ViewBag.Name = stVm.Name;
+                                    Session["Name"] = stVm.Name;
                                     Session["login"] = model;
 
                                     return View("Home", model); 
@@ -69,13 +71,7 @@ namespace AciLabTestApp.Controllers
                             return View("Login");
 
                         }
-                        //else //web api sent error response 
-                        //{
-                        //    //log response status here..
-
-
                         ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                        //}
                     }
                     Session["login"] = model;
                 }
@@ -96,6 +92,13 @@ namespace AciLabTestApp.Controllers
 
         public ActionResult Register()
         {
+            var userLogin = Session["login"];
+
+            if (userLogin != null)
+            {
+                ViewBag.Name = Session["Name"];
+                return View("Home");
+            }
             return View();
         }
 
@@ -109,7 +112,7 @@ namespace AciLabTestApp.Controllers
 
                 if (userLogin != null)
                 {
-                    return View("Home", model);
+                    return View("Home");
                 }
                 if (ModelState.IsValid)
                 {
@@ -129,14 +132,20 @@ namespace AciLabTestApp.Controllers
 
                            var getStudent = readTask.Result;
 
-                           var loginModel = new LoginViewModel();
-                           loginModel.StudentId = getStudent.StudentId;
-                           loginModel.StudentEmail = getStudent.Email;
-                           loginModel.Password = getStudent.Password;
+                           var loginModel = new LoginViewModel
+                           {
+                               StudentId = getStudent.StudentId,
+                               StudentEmail = getStudent.Email,
+                               Password = getStudent.Password
+                           };
 
-                           Session["login"] = loginModel;
+                            Session["login"] = loginModel;
 
-                           return View("Home", model);
+                            Session["Name"] = getStudent.Name;
+
+                            ViewBag.Name = Session["Name"];
+
+                           return View("Home", loginModel);
                         }
                         //else //web api sent error response 
                         //{
@@ -168,6 +177,7 @@ namespace AciLabTestApp.Controllers
         public ActionResult Logout()
         {
             Session["login"] = null;
+            Session["Name"] = null;
             return RedirectToAction("Login", "Login");
         }
        

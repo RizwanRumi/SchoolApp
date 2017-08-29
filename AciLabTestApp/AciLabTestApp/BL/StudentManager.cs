@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Web.Helpers;
 using AciLabTestApp.IBLL;
 using AciLabTestApp.Models;
 
@@ -9,22 +8,21 @@ namespace AciLabTestApp.BL
 {
     public class StudentManager : IStudent
     {
-        StudentDBEntities dbContext = new StudentDBEntities();
+        private StudentDBEntities dbContext = new StudentDBEntities();
+
         public IList<StudentViewModel> GetAllStudent()
         {
-            IList<StudentViewModel> students = null;
-
-            students = dbContext.tblStudents.Select(
-                s => new StudentViewModel()
+            IList<StudentViewModel> students = dbContext.tblStudents.Select(
+                s => new StudentViewModel
                 {
-                    StudentId =  s.StudentId,
+                    StudentId = s.StudentId,
                     Name = s.Name,
                     Email = s.Email,
-                    Address =  s.Address,
-                    Department =  s.Department,
-                    Batch =  s.Batch,
-                    Enrolled =  s.Enrolled,
-                    Password =  s.Password
+                    Address = s.Address,
+                    Department = s.Department,
+                    Batch = s.Batch,
+                    Enrolled = s.Enrolled,
+                    Password = s.Password
                 }).ToList();
 
             return students;
@@ -32,15 +30,17 @@ namespace AciLabTestApp.BL
 
         public StudentViewModel AddNewStudent(StudentViewModel model)
         {
-            tblStudent astudent = new tblStudent();
-            astudent.StudentId = model.StudentId;
-            astudent.Name = model.Name;
-            astudent.Email = model.Email;
-            astudent.Address = model.Address;
-            astudent.Department = model.Department;
-            astudent.Batch = model.Batch;
-            astudent.Enrolled = model.Enrolled;
-            astudent.Password = model.Password;
+            var astudent = new tblStudent
+            {
+                StudentId = model.StudentId,
+                Name = model.Name,
+                Email = model.Email,
+                Address = model.Address,
+                Department = model.Department,
+                Batch = model.Batch,
+                Enrolled = model.Enrolled,
+                Password = model.Password
+            };
 
             dbContext.tblStudents.Add(astudent);
             dbContext.SaveChanges();
@@ -50,22 +50,19 @@ namespace AciLabTestApp.BL
             model.Email = astudent.Email;
             model.Password = astudent.Password;
 
-
             return model;
         }
 
-        public IList<TutorialViewModel> GetAllTutorial(int id)
+        public IList<TutorialViewModel> GetAllTutorial(int stdId)
         {
-            IList<TutorialViewModel> tutorials = null;
-
-            tutorials = dbContext.tblTutorials.Select(
-                s => new TutorialViewModel()
+            IList<TutorialViewModel> tutorials = dbContext.tblTutorials.Select(
+                s => new TutorialViewModel
                 {
-                    TutorialId =  s.TutorialId,
+                    TutorialId = s.TutorialId,
                     StudentId = s.StudentId,
-                    FileName =  s.FileName,
+                    FileName = s.FileName,
                     Complete = s.Complete
-                }).Where(s=>s.StudentId == id).ToList();
+                }).Where(s => s.StudentId == stdId).ToList();
 
             return tutorials;
         }
@@ -73,16 +70,85 @@ namespace AciLabTestApp.BL
 
         public bool AddTutotrial(TutorialViewModel tmodel)
         {
-            tblTutorial aTutorial = new tblTutorial();
-            aTutorial.StudentId = tmodel.StudentId;
-            aTutorial.TutorialId = tmodel.TutorialId;
-            aTutorial.FileName = tmodel.FileName;
-            aTutorial.Complete = tmodel.Complete;
-          
+            var aTutorial = new tblTutorial
+            {
+                StudentId = tmodel.StudentId,
+                TutorialId = tmodel.TutorialId,
+                FileName = tmodel.FileName,
+                Complete = tmodel.Complete
+            };
 
             dbContext.tblTutorials.Add(aTutorial);
             dbContext.SaveChanges();
+
+            return true;
+        }
+
+        public IList<CompleteCourseViewModel> GetAllCompletedCourse(int stdId)
+        {
+            var cmpCourseList = new List<CompleteCourseViewModel>();
+            var completeCourse = dbContext.tblCourseCompletes.Where(s => s.StudentId == stdId).ToList();
+            var aCourseManager = new CourseManager();
+            var courseList = aCourseManager.GetAllCourses();
+
+            foreach (var item in completeCourse)
+            {
+                cmpCourseList.AddRange(from model in courseList
+                    where item.CourseId == model.CourseId
+                    select new CompleteCourseViewModel
+                    {
+                        CourseId = model.CourseId, CourseName = model.CourseName, Status = item.Status, StudentId = item.StudentId, CompleteCourseId = item.Id
+                    });
+            }
             
+            return cmpCourseList;
+        }
+
+        public IList<CourseViewModel> GetRemainCourseList(int stdId)
+        {
+            IList<CourseViewModel> remaincourseList;
+
+            var completeCourse = dbContext.tblCourseCompletes.Select(
+                cmp => new CompleteCourseViewModel
+                {
+                    CourseId  = cmp.CourseId,
+                    StudentId = cmp.StudentId
+                }).Where(cmp => cmp.StudentId == stdId).ToList();
+
+            
+                var aCourseManager = new CourseManager();
+
+                var courseList = aCourseManager.GetAllCourses();
+
+            if(completeCourse.Count == 0)
+            {
+                remaincourseList = courseList;
+            }
+            else
+            {
+                foreach (var model in from model in courseList.ToList() from cmpModel in completeCourse.Where(cmpModel => cmpModel.CourseId == model.CourseId) select model)
+                {
+                    courseList.Remove(model);
+                }
+
+                remaincourseList = courseList ;
+            }
+
+            return remaincourseList;
+        }
+
+        public bool AddCompleteCourseViewModel(CompleteCourseViewModel cmpModel)
+        {
+            var cmpCourse = new tblCourseComplete
+            {
+                CourseId = cmpModel.CourseId,
+                StudentId = cmpModel.StudentId,
+                Status = cmpModel.Status 
+            };
+
+            dbContext.tblCourseCompletes.Add(cmpCourse);
+            dbContext.SaveChanges();
+
             return true;
         }
     }

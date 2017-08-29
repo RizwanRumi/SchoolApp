@@ -27,7 +27,7 @@ namespace AciLabTestApp.Controllers
                 var result = responseTask.Result;
                 if (result.IsSuccessStatusCode)
                 {
-                    var readTask = result.Content.ReadAsAsync<IList<CourseViewModel>>();
+                    var readTask = result.Content.ReadAsAsync<List<CourseViewModel>>();
                     readTask.Wait();
 
                     courses = readTask.Result;
@@ -92,7 +92,7 @@ namespace AciLabTestApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            CourseViewModel model = null;
+            CourseViewModel model;
 
             using (var client = new HttpClient())
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http.Headers;
@@ -19,7 +20,7 @@ namespace AciLabTestApp.Controllers
         {
             var userLogin = (LoginViewModel) Session["login"];
 
-            if (userLogin != null)
+            if (userLogin != null && id != null && id != 0)
             {
                 ViewBag.Id = id;
                 var getTutorialList = new List<TutorialViewModel>();
@@ -33,10 +34,10 @@ namespace AciLabTestApp.Controllers
                     var result = responseTask.Result;
                     if (result.IsSuccessStatusCode)
                     {
-                        var readTask = result.Content.ReadAsAsync<IList<TutorialViewModel>>();
+                        var readTask = result.Content.ReadAsAsync<List<TutorialViewModel>>();
                         readTask.Wait();
 
-                        getTutorialList = (List<TutorialViewModel>) readTask.Result;
+                        getTutorialList =  readTask.Result;
 
                         return View(getTutorialList);
 
@@ -64,15 +65,16 @@ namespace AciLabTestApp.Controllers
             {
                 ViewBag.stdId = id;
                 ViewBag.Message = "";
-                var tuModel = new TutorialViewModel();
-                tuModel.StudentId = Convert.ToInt32(id);
+                var tuModel = new TutorialViewModel
+                {
+                    StudentId = Convert.ToInt32(id)
+                };
 
                 return View(tuModel);
             }
             return RedirectToAction("Login", "Login");
         }
-
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateTutorial([Bind(Include = "TutorialId,StudentId,Complete")] TutorialViewModel model)
@@ -142,11 +144,171 @@ namespace AciLabTestApp.Controllers
             }
             return RedirectToAction("Login", "Login");
         }
-
-
+        
         public ActionResult EditTutorial(int id)
         {
             return View();
         }
+        
+        public ActionResult Courses(int? id)
+        {
+            //var userLogin = (LoginViewModel) Session["login"];
+
+            //if (userLogin != null && id != null && id != 0)
+            //{
+                ViewBag.Id = id;
+                var completeCourseList = new List<CompleteCourseViewModel>();
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri("http://localhost:1582/api/");
+
+                    var responseTask = client.GetAsync("Student/GetCompleteCourse?id=" + id);
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<List<CompleteCourseViewModel>>();
+                        readTask.Wait();
+
+                        completeCourseList = readTask.Result;
+
+                        return View(completeCourseList);
+
+                    }
+                    //else //web api sent error response 
+                    //{
+                    //    //log response status here..
+
+
+                    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+
+                    return View(completeCourseList);
+                    //}
+                }
+
+                return View();
+            //}
+            //return RedirectToAction("Login", "Login");
+        }
+
+        public ActionResult CreateCourse(int? id)
+        {
+            var cmpCoursModel = new CompleteCourseViewModel();
+            if (id != 0 && id != null)
+            {
+                cmpCoursModel.StudentId = (int) id;
+                cmpCoursModel.Status = false;
+            }
+
+            var getcourses = GetMultipleCourse(id);
+
+            ViewBag.CourseList = new MultiSelectList(getcourses, "CourseId", "CourseName");
+            ViewBag.getId = id;
+            ViewBag.Message = "";
+
+            return View(cmpCoursModel);
+        }
+
+        public List<CourseViewModel> GetMultipleCourse(int? id)
+        {
+            var courses = new List<CourseViewModel>();
+
+            if (id != null && id != 0)
+            {
+                using (var client = new HttpClient())
+                {
+                    var remainCourseList = new List<CourseViewModel>();
+
+                    client.BaseAddress = new Uri("http://localhost:1582/api/");
+
+                    var responseTask = client.GetAsync("Student/GetIncompleteCourses?id=" + id);
+                    responseTask.Wait();
+
+                    var result = responseTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var readTask = result.Content.ReadAsAsync<List<CourseViewModel>>();
+                        readTask.Wait();
+
+                        remainCourseList = readTask.Result;
+                    }
+
+                    courses = remainCourseList.Select(c => new CourseViewModel()
+                    {
+                        CourseId = c.CourseId,
+                        CourseName = c.CourseName
+                    }).ToList();
+
+                }
+            }
+            
+            return courses;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateCourse(int[] CourseId, CompleteCourseViewModel model)
+        {
+
+            if (CourseId != null)
+            {
+                
+                    int len = CourseId.Length;
+                    for (int k = 0; k < len; k++)
+                    {
+                        var newModel = new CompleteCourseViewModel
+                        {
+                            CourseId = CourseId[k],
+                            StudentId = model.StudentId,
+                            Status = model.Status
+                        };
+                        using (var client = new HttpClient())
+                        {
+                            client.BaseAddress = new Uri("http://localhost:1582/api/");
+
+                            var responseTask = client.PostAsJsonAsync("Student/AddIncompleteCourses", newModel);
+                            responseTask.Wait();
+
+                            var result = responseTask.Result;
+
+                            if (result.IsSuccessStatusCode)
+                            {
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                                break;
+                            }
+                        }
+                    }
+               
+
+                ViewBag.Message = "Course are added Successfully";
+                var updatedcourses = GetMultipleCourse(model.StudentId);
+                ViewBag.CourseList = new MultiSelectList(updatedcourses, "CourseId", "CourseName");
+                ViewBag.getId = model.StudentId;
+                ViewBag.Error = false;
+                return View(model);
+              
+            }
+
+            var courses = GetMultipleCourse(model.StudentId);
+            ViewBag.CourseList = new MultiSelectList(courses, "CourseId", "CourseName");
+            ViewBag.getId = model.StudentId;
+            ViewBag.Error = true;
+            return View(model);
+        }
+
+        public ActionResult Editcourse(int? id)
+        {
+            return View();
+        }
+
+        public ActionResult Results(int? id)
+        {
+            return View();
+        }
+
 	}
 }

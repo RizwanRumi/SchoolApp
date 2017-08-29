@@ -25,11 +25,15 @@
                         var userLogin = (LoginViewModel) Session["login"];
                         if (userLogin != null)
                         {
-                            <li>@Html.ActionLink("Student Tutorials", "Tutorials", "Student", new {id = userLogin.StudentId, area = ""}, null)</li>
-                            <li>@Html.ActionLink("Student CourseList", "CourseList", "Student", new {id = userLogin.StudentId, area = ""}, null)</li>
-                            <li>@Html.ActionLink("Student Result", "Result", "Student", new {id = userLogin.StudentId, area = ""}, null)</li>
+                            <li>@Html.ActionLink(" Student Tutorials", "Tutorials", "Student", new { id = userLogin.StudentId, area = "" }, new { @class = "glyphicon glyphicon-file" })</li>
+                            <li>@Html.ActionLink(" Student CourseList", "Courses", "Student", new { id = userLogin.StudentId, area = "" }, new { @class = "glyphicon glyphicon-list" })</li>
+                            <li>@Html.ActionLink(" Student Result", "Results", "Student", new { id = userLogin.StudentId, area = "" }, new { @class = "glyphicon glyphicon-education" })</li>
+                            <li>@Html.ActionLink(" Logout", "Logout", "Login", null, new {@class = "glyphicon glyphicon-log-out"})</li>
+                        }
+                        else
+                        {
                             <li>@Html.ActionLink("API", "Index", "Help", new {area = ""}, null)</li>
-                            <li>@Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "glyphicon-log-out" })</li>
+                         <li>@Html.ActionLink(" Login", "Login", "Login", new { area = "" }, new{@class="glyphicon glyphicon-log-in"})</li>
                         }
                     }
                     

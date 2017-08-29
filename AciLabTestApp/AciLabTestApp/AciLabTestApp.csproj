@@ -171,8 +171,6 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StudentApiController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
-    <Compile Include="Controllers\Test2Controller.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -180,6 +178,7 @@
     <Compile Include="IBLL\ICourse.cs" />
     <Compile Include="IBLL\IStudent.cs" />
     <Compile Include="Infrastructure\NinjectResolver.cs" />
+    <Compile Include="Models\CompleteCourseViewModel.cs" />
     <Compile Include="Models\CourseViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
@@ -276,14 +275,8 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Course\Index.cshtml" />
-    <Content Include="Views\Test2\Create.cshtml" />
-    <Content Include="Views\Test2\Delete.cshtml" />
-    <Content Include="Views\Test2\Details.cshtml" />
-    <Content Include="Views\Test2\Edit.cshtml" />
-    <Content Include="Views\Test2\Index.cshtml" />
     <Content Include="Views\Course\Create.cshtml" />
     <Content Include="Views\Course\Edit.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Login\Home.cshtml" />
     <Content Include="Views\Login\Register.cshtml" />
     <EntityDeploy Include="StudentDb.edmx">
@@ -307,6 +300,10 @@
     <Content Include="Views\Student\Tutorials.cshtml" />
     <Content Include="Views\Student\CreateTutorial.cshtml" />
     <Content Include="Views\Student\EditTutorial.cshtml" />
+    <Content Include="Views\Student\Courses.cshtml" />
+    <Content Include="Views\Student\CreateCourse.cshtml" />
+    <Content Include="Views\Student\Editcourse.cshtml" />
+    <Content Include="Views\Student\Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

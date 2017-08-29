@@ -11,9 +11,12 @@ namespace AciLabTestApp.IBLL
     {
         IList<StudentViewModel> GetAllStudent();
         StudentViewModel AddNewStudent(StudentViewModel model);
-
-        IList<TutorialViewModel> GetAllTutorial(int id);
-
+        IList<TutorialViewModel> GetAllTutorial(int stdId);
         bool AddTutotrial(TutorialViewModel tmodel);
+        IList<CompleteCourseViewModel> GetAllCompletedCourse(int stdId);
+        IList<CourseViewModel> GetRemainCourseList(int stdId);
+
+        bool AddCompleteCourseViewModel(CompleteCourseViewModel cmpModel);
+
     }
 }

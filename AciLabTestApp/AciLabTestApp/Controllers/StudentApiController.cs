@@ -36,9 +36,7 @@ namespace AciLabTestApp.Controllers
         [HttpPost]
         public IHttpActionResult PostStudent(StudentViewModel model)
         {
-            StudentViewModel studentVm = new StudentViewModel();
-
-            studentVm = istudentDetails.AddNewStudent(model);
+            StudentViewModel studentVm = istudentDetails.AddNewStudent(model);
 
             return Json(studentVm);
         }
@@ -47,8 +45,7 @@ namespace AciLabTestApp.Controllers
         [HttpGet]
         public IHttpActionResult GetTutorialList(int id)
         {
-            IList<TutorialViewModel> tutorials = new List<TutorialViewModel>();
-            tutorials = istudentDetails.GetAllTutorial(id);
+            IList<TutorialViewModel> tutorials = istudentDetails.GetAllTutorial(id);
 
             return Json(tutorials);
         }
@@ -58,8 +55,6 @@ namespace AciLabTestApp.Controllers
         [HttpPost]
         public IHttpActionResult PostFileUpload()
         {
-
-            HttpResponseMessage result = null;
             string getFileName = "";
 
             var httpRequest = HttpContext.Current.Request;
@@ -106,6 +101,32 @@ namespace AciLabTestApp.Controllers
             
            return Json(res);
         }
-        
+
+        [Route("GetCompleteCourse")]
+        [HttpGet]
+        public IHttpActionResult GetCompleteCourseList(int id)
+        {
+            IList<CompleteCourseViewModel> cmpCourseList = istudentDetails.GetAllCompletedCourse(id);
+
+            return Json(cmpCourseList);
+        }
+
+        [Route("GetIncompleteCourses")]
+        [HttpGet]
+        public IHttpActionResult GetRemainCourseList(int id)
+        {
+            IList<CourseViewModel> cmpCourseList = istudentDetails.GetRemainCourseList(id);
+
+            return Json(cmpCourseList);
+        }
+
+        [Route("AddIncompleteCourses")]
+        [HttpPost]
+        public IHttpActionResult PostAddRemainCourseList(CompleteCourseViewModel model)
+        {
+            bool result = istudentDetails.AddCompleteCourseViewModel(model);
+
+            return Json(result);
+        }
     }
 }
