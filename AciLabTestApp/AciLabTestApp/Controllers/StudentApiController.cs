@@ -128,5 +128,17 @@ namespace AciLabTestApp.Controllers
 
             return Json(result);
         }
+
+        [Route("getResults")]
+        [HttpGet]
+        public IHttpActionResult GetResultList(int id)
+        {
+            List<ResultViewModel> resList = null;
+
+            resList = istudentDetails.GetAllResult(id);
+
+            return Json(resList);
+        }
+
     }
 }

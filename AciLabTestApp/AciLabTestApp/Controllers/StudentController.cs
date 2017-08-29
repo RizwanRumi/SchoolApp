@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration.Configuration;
-using System.Globalization;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Mvc;
 using AciLabTestApp.Models;
 using System.Net.Http;
-using Newtonsoft.Json;
 
 namespace AciLabTestApp.Controllers
 {
@@ -40,19 +36,12 @@ namespace AciLabTestApp.Controllers
                         getTutorialList =  readTask.Result;
 
                         return View(getTutorialList);
-
                     }
-                    //else //web api sent error response 
-                    //{
-                    //    //log response status here..
-
-
+                    
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
 
                     return View(getTutorialList);
-                    //}
                 }
-                
             }
             return RedirectToAction("Login", "Login");
         }
@@ -85,9 +74,9 @@ namespace AciLabTestApp.Controllers
             {
                 HttpPostedFileBase file = Request.Files["fileUpload"];
 
-                if (file != null)
+                if (file.FileName != "" && file.FileName != null)
                 {
-                    using (HttpClient client = new HttpClient())
+                    using (var client = new HttpClient())
                     {
                         using (var content = new MultipartFormDataContent())
                         {
@@ -152,10 +141,10 @@ namespace AciLabTestApp.Controllers
         
         public ActionResult Courses(int? id)
         {
-            //var userLogin = (LoginViewModel) Session["login"];
+            var userLogin = (LoginViewModel)Session["login"];
 
-            //if (userLogin != null && id != null && id != 0)
-            //{
+            if (userLogin != null && id != null && id != 0)
+            {
                 ViewBag.Id = id;
                 var completeCourseList = new List<CompleteCourseViewModel>();
                 using (var client = new HttpClient())
@@ -172,24 +161,14 @@ namespace AciLabTestApp.Controllers
                         readTask.Wait();
 
                         completeCourseList = readTask.Result;
-
                         return View(completeCourseList);
-
                     }
-                    //else //web api sent error response 
-                    //{
-                    //    //log response status here..
-
 
                     ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-
                     return View(completeCourseList);
-                    //}
                 }
-
-                return View();
-            //}
-            //return RedirectToAction("Login", "Login");
+            }
+            return RedirectToAction("Login", "Login");
         }
 
         public ActionResult CreateCourse(int? id)
@@ -250,39 +229,34 @@ namespace AciLabTestApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateCourse(int[] CourseId, CompleteCourseViewModel model)
         {
-
             if (CourseId != null)
             {
-                
-                    int len = CourseId.Length;
-                    for (int k = 0; k < len; k++)
+                int len = CourseId.Length;
+                for (int k = 0; k < len; k++)
+                {
+                    var newModel = new CompleteCourseViewModel
                     {
-                        var newModel = new CompleteCourseViewModel
+                        CourseId = CourseId[k],
+                        StudentId = model.StudentId,
+                        Status = model.Status
+                    };
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("http://localhost:1582/api/");
+
+                        var responseTask = client.PostAsJsonAsync("Student/AddIncompleteCourses", newModel);
+                        responseTask.Wait();
+
+                        var result = responseTask.Result;
+
+                        if (result.IsSuccessStatusCode) { }
+                        else
                         {
-                            CourseId = CourseId[k],
-                            StudentId = model.StudentId,
-                            Status = model.Status
-                        };
-                        using (var client = new HttpClient())
-                        {
-                            client.BaseAddress = new Uri("http://localhost:1582/api/");
-
-                            var responseTask = client.PostAsJsonAsync("Student/AddIncompleteCourses", newModel);
-                            responseTask.Wait();
-
-                            var result = responseTask.Result;
-
-                            if (result.IsSuccessStatusCode)
-                            {
-                            }
-                            else
-                            {
-                                ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-                                break;
-                            }
+                            ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+                            break;
                         }
                     }
-               
+                }
 
                 ViewBag.Message = "Course are added Successfully";
                 var updatedcourses = GetMultipleCourse(model.StudentId);
@@ -290,7 +264,6 @@ namespace AciLabTestApp.Controllers
                 ViewBag.getId = model.StudentId;
                 ViewBag.Error = false;
                 return View(model);
-              
             }
 
             var courses = GetMultipleCourse(model.StudentId);
@@ -307,7 +280,67 @@ namespace AciLabTestApp.Controllers
 
         public ActionResult Results(int? id)
         {
-            return View();
+            {
+                var userLogin = (LoginViewModel)Session["login"];
+
+                if (userLogin != null && id != null && id != 0)
+                {
+                    ViewBag.Id = id;
+                    var getResultList = new List<ResultViewModel>();
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("http://localhost:1582/api/");
+
+                        var responseTask = client.GetAsync("Student/getResults?id=" + id);
+                        responseTask.Wait();
+
+                        var result = responseTask.Result;
+                        if (result.IsSuccessStatusCode)
+                        {
+                            var readTask = result.Content.ReadAsAsync<List<ResultViewModel>>();
+                            readTask.Wait();
+
+                            getResultList = readTask.Result;
+
+                            return View(getResultList);
+                        }
+
+                        ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
+
+                        return View(getResultList);
+                    }
+                }
+                return RedirectToAction("Login", "Login");
+            }
+        }
+
+        public ActionResult CreateResult(int? id)
+        {
+            var userLogin = (LoginViewModel)Session["login"];
+
+            if (userLogin != null && id != null && id != 0)
+            {
+                ViewBag.stdId = id;
+                ViewBag.Message = "";
+                var resModel = new ResultViewModel()
+                {
+                    StudentId = Convert.ToInt32(id)
+                };
+
+                return View(resModel);
+            }
+            return RedirectToAction("Login", "Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateResult([Bind(Include = "ResultId,StudentId,SemesterName,Grade")] ResultViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return View(model);
+            }
+            return View(model);
         }
 
 	}

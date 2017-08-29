@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Helpers;
 using AciLabTestApp.IBLL;
 using AciLabTestApp.Models;
 
@@ -151,5 +150,19 @@ namespace AciLabTestApp.BL
 
             return true;
         }
+
+        public List<ResultViewModel> GetAllResult(int stdId)
+        {
+            List<ResultViewModel> students = dbContext.tblResults.Select(
+                s => new ResultViewModel()
+                {
+                    ResultId =  s.ResId,
+                    StudentId = s.StudentId,
+                    SemesterName = s.SemesterName,
+                    Grade = s.Grade
+                }).ToList();
+
+            return students;
+        } 
     }
 }

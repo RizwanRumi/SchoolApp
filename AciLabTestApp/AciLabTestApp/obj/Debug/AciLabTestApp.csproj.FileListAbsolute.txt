@@ -42,4 +42,3 @@ E:\Language & Program\ACI\SchoolApp\AciLabTestApp\AciLabTestApp\bin\System.Web.W
 E:\Language & Program\ACI\SchoolApp\AciLabTestApp\AciLabTestApp\bin\Antlr3.Runtime.pdb
 E:\Language & Program\ACI\SchoolApp\AciLabTestApp\AciLabTestApp\obj\Debug\AciLabTestApp.dll
 E:\Language & Program\ACI\SchoolApp\AciLabTestApp\AciLabTestApp\obj\Debug\AciLabTestApp.pdb
-E:\Language & Program\ACI\SchoolApp\AciLabTestApp\AciLabTestApp\obj\Debug\AciLabTestApp.csprojResolveAssemblyReference.cache

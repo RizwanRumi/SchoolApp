@@ -15,8 +15,7 @@ namespace AciLabTestApp.IBLL
         bool AddTutotrial(TutorialViewModel tmodel);
         IList<CompleteCourseViewModel> GetAllCompletedCourse(int stdId);
         IList<CourseViewModel> GetRemainCourseList(int stdId);
-
         bool AddCompleteCourseViewModel(CompleteCourseViewModel cmpModel);
-
+        List<ResultViewModel> GetAllResult(int stdId);
     }
 }

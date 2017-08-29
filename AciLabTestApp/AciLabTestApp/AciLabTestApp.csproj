@@ -181,6 +181,7 @@
     <Compile Include="Models\CompleteCourseViewModel.cs" />
     <Compile Include="Models\CourseViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\ResultViewModel.cs" />
     <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\TutorialViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -304,6 +305,7 @@
     <Content Include="Views\Student\CreateCourse.cshtml" />
     <Content Include="Views\Student\Editcourse.cshtml" />
     <Content Include="Views\Student\Results.cshtml" />
+    <Content Include="Views\Student\CreateResult.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
